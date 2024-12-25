@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Book List</h1>
+    <ul id="book-list">
+        <!-- Books will be dynamically added here -->
+    </ul>
+
+    <script>
+        // Replace with your endpoint URL
+        const endpointUrl = "https://your-api-endpoint.com/books";
+
+        async function fetchBooks() {
+            try {
+                const response = await fetch(endpointUrl);
+                if (!response.ok) {
+                    throw new Error(`Error fetching books: ${response.statusText}`);
+                }
+                const books = await response.json();
+                const bookList = document.getElementById('book-list');
+
+                books.forEach(book => {
+                    const li = document.createElement('li');
+                    li.textContent = book.title + (book.author ? ` by ${book.author}` : '');
+                    bookList.appendChild(li);
+                });
+            } catch (error) {
+                console.error(error);
+                const bookList = document.getElementById('book-list');
+                const errorMessage = document.createElement('li');
+                errorMessage.textContent = "Failed to load books.";
+                errorMessage.style.color = "red";
+                bookList.appendChild(errorMessage);
+            }
+        }
+
+        // Fetch and display books when the page loads
+        fetchBooks();
+    </script>
+</body>
+</html>
